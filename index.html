@@ -355,7 +355,29 @@
   <div class="modal-panel" id="modal-panel"></div>
 </div>
 
-<script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+  import {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+    serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAVvXZP9ZpLvI_uwXLkW6QDo-amwXDX4zU",
+    authDomain: "mytodo-app-e3451.firebaseapp.com",
+    projectId: "mytodo-app-e3451",
+    storageBucket: "mytodo-app-e3451.firebasestorage.app",
+    messagingSenderId: "918934658897",
+    appId: "1:918934658897:web:c7b463ec379e2fd1927d70"
+  };
+
+  const appFirebase = initializeApp(firebaseConfig);
+  const db = getFirestore(appFirebase);
+  const FIRESTORE_DOC_REF = doc(db, "todoApp", "mainState");
+
   const STORAGE_KEY = 'todo_sheet_v3';
   let todos = [];
   let dailyCounts = {};
@@ -624,28 +646,70 @@
     return               { color:'red',    dot:true, text:'(지연중)' };
   }
 
-  /* ── Persistence ── */
-  function load() {
+  /* ── Persistence: Firestore + local backup ── */
+  function normalizeLoadedData(d) {
+    todos = (d.todos || []).map(t => ({
+      ...t,
+      deptId:   t.deptId   !== undefined ? t.deptId   : '',
+      memberId: t.memberId !== undefined ? t.memberId : ''
+    }));
+    dailyCounts = d.dailyCounts || {};
+    departments = d.departments || [];
+    members     = d.members     || [];
+  }
+
+  async function load() {
+    let loaded = false;
+
     try {
-      const d = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
-      if (d) {
-        todos = (d.todos || []).map(t => ({
-          ...t,
-          deptId:   t.deptId   !== undefined ? t.deptId   : '',
-          memberId: t.memberId !== undefined ? t.memberId : ''
-        }));
-        dailyCounts = d.dailyCounts || {};
-        departments = d.departments || [];
-        members     = d.members     || [];
+      const snap = await getDoc(FIRESTORE_DOC_REF);
+      if (snap.exists()) {
+        normalizeLoadedData(snap.data());
+        loaded = true;
       }
-    } catch(e) { todos = []; dailyCounts = {}; departments = []; members = []; }
+    } catch(e) {
+      console.warn('Firestore에서 데이터를 불러오지 못해 localStorage 백업을 확인합니다.', e);
+    }
+
+    if (!loaded) {
+      try {
+        const d = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+        if (d) {
+          normalizeLoadedData(d);
+          loaded = true;
+        }
+      } catch(e) {
+        console.warn('localStorage 백업을 불러오지 못했습니다.', e);
+      }
+    }
+
+    if (!loaded) {
+      todos = [];
+      dailyCounts = {};
+      departments = [];
+      members = [];
+    }
+
     if (departments.length === 0) {
       DEFAULT_DEPTS.forEach(name => departments.push({ id: genId(), name }));
-      save();
+      await save();
+    } else if (!loaded) {
+      await save();
     }
   }
-  function save() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ todos, dailyCounts, departments, members }));
+
+  async function save() {
+    const data = { todos, dailyCounts, departments, members };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+    try {
+      await setDoc(FIRESTORE_DOC_REF, {
+        ...data,
+        updatedAt: serverTimestamp()
+      }, { merge: true });
+    } catch(e) {
+      console.error('Firestore 저장 실패. localStorage에는 백업되었습니다.', e);
+    }
   }
 
   /* ── Data ── */
@@ -1236,9 +1300,13 @@
   document.getElementById('clear-done').addEventListener('click', clearDone);
   document.getElementById('btn-undo').addEventListener('click', undo);
 
-  load();
-  populateRegDeptSelect();
-  render();
+  async function initApp() {
+    await load();
+    populateRegDeptSelect();
+    render();
+  }
+
+  initApp();
 </script>
 </body>
 </html>
