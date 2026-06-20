@@ -78,6 +78,7 @@
       background: #6c63ff; color: #fff; font-weight: 600;
       padding: 10px 6px; text-align: center; font-size: .81rem;
       white-space: nowrap; user-select: none;
+      position: sticky; top: 0; z-index: 2;
     }
     thead th:first-child { border-radius: 8px 0 0 0; }
     thead th:last-child  { border-radius: 0 8px 0 0; }
@@ -103,14 +104,14 @@
     .col-completedate { width: 9.7rem; }
     .col-status       { width: 7.2rem; text-align: center; }
     .col-del          { width: 2.4rem; text-align: center; }
-    .col-ext          { width: 5rem; text-align: center; }
+    .col-ext          { width: 7rem; text-align: center; }
 
     /* ── Serial ── */
     .serial-plain {
       display: inline-flex; align-items: center; gap: 0;
       font-size: .76rem; font-weight: 600; letter-spacing: .02em;
     }
-    .serial-derived { padding-left: 5ch; }
+    .serial-indent { font-size: .7rem; color: #bbb; flex-shrink: 0; margin-right: 2px; line-height: 1; }
     .serial-yymmdd {
       width: 6ch; border: none; border-bottom: 1px dashed transparent;
       background: transparent; color: inherit; font: inherit; font-size: inherit;
@@ -119,7 +120,7 @@
     }
     .serial-yymmdd:hover { border-bottom-color: currentColor; }
     .serial-yymmdd:focus { border-bottom: 1.5px solid currentColor; }
-    .serial-fixed { opacity: .7; pointer-events: none; }
+    .serial-fixed { pointer-events: none; }
 
     /* ── Cell inputs ── */
     .cell-input {
@@ -152,7 +153,7 @@
     }
     .cell-readonly.date-val { font-size: .83rem; text-align: center; color: #777; }
 
-    .complete-changed { font-size: .78rem; color: #e67e00; text-align: center; padding: 4px 2px; line-height: 1.4; }
+    .complete-changed { font-size: .78rem; color: #888; text-align: center; padding: 4px 2px; line-height: 1.4; }
     .date-readonly { font-size: .83rem; color: #999; padding: 5px 7px; display: block; text-align: center; }
 
     /* ── 진행현황 ── */
@@ -167,6 +168,11 @@
     .status-label.red    { color: #C40000; }
     .status-label.yellow { color: #8A6500; }
     .status-label.green  { color: #006A00; }
+    @keyframes blink-orange { 0%,100% { opacity:1; } 50% { opacity:.15; } }
+    .tl-dot.orange { background: #FF8C00; box-shadow: 0 0 6px rgba(255,140,0,.65); animation: blink-orange .9s ease-in-out infinite; }
+    .status-label.orange { color: #B85C00; }
+    .cell-unset { border-color: #FF8C00 !important; background: #fffaf5 !important; box-shadow: 0 0 0 2px rgba(255,140,0,.18) !important; }
+    .required-placeholder { display:block; color:#FF8C00; font-size:.82rem; font-weight:700; text-align:center; padding:5px 7px; cursor:pointer; }
 
     /* ── Buttons ── */
     .btn-del { background: none; border: none; color: #ccc; font-size: .95rem; cursor: pointer; padding: 4px 5px; border-radius: 6px; transition: color .2s, background .2s; }
@@ -184,6 +190,22 @@
       border-radius: 5px; white-space: nowrap; transition: all .18s;
     }
     .btn-uncomplete:hover { background: #6c63ff; color: #fff; }
+    .rating-selector { display:flex; flex-direction:column; gap:3px; margin-bottom:4px; align-items:center; }
+    .rating-nav { display:flex; align-items:center; gap:2px; width:100%; }
+    .btn-rate-nav { background:none; border:1px solid #ccc; border-radius:3px; padding:1px 4px; font-size:.68rem; cursor:pointer; color:#888; line-height:1.3; flex-shrink:0; transition:all .15s; }
+    .btn-rate-nav:hover { border-color:#6c63ff; color:#6c63ff; background:#f4f3ff; }
+    .rating-cur { flex:1; text-align:center; font-size:.7rem; font-weight:700; overflow:hidden; white-space:nowrap; }
+    .rating-cur.good       { color:#2e7d32; }
+    .rating-cur.poor       { color:#b36000; }
+    .rating-cur.bad        { color:#c62828; }
+    .rating-cur.unresolved { color:#6a1b9a; }
+    .btn-rate-confirm { background:#6c63ff; color:#fff; border:none; border-radius:4px; padding:2px 10px; font-size:.68rem; font-weight:700; cursor:pointer; transition:all .15s; }
+    .btn-rate-confirm:hover { background:#574fd6; }
+    .rating-badge { display:block; text-align:center; border-radius:4px; padding:2px 4px; font-size:.7rem; font-weight:700; margin-bottom:4px; white-space:nowrap; }
+    .rating-badge.good       { background:#2e7d32; color:#fff; }
+    .rating-badge.poor       { background:#f57f17; color:#fff; }
+    .rating-badge.bad        { background:#c62828; color:#fff; }
+    .rating-badge.unresolved { background:#6a1b9a; color:#fff; }
     .btn-cancel-ext {
       background: none; border: 1px solid #9b59b6; color: #7d3c98;
       font-size: .7rem; font-weight: 600; cursor: pointer; padding: 4px 5px;
@@ -200,7 +222,12 @@
       border-top: 3px solid #6c63ff; margin: 0 -1.87rem;
       padding: 1.2rem 1.87rem 1.47rem; border-radius: 0 0 1rem 1rem;
     }
-    .register-header { font-size: .95rem; font-weight: 700; color: #6c63ff; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .register-header { font-size: .95rem; font-weight: 700; color: #6c63ff; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; justify-content: space-between; }
+    .register-toggle { font-size: .75rem; font-weight: 400; color: #9b93ff; letter-spacing: 0; }
+    .register-section.reg-collapsed { padding-top: 0.45rem; padding-bottom: 0.45rem; }
+    .register-section.reg-collapsed .register-header { margin-bottom: 0; }
+    .register-section.reg-collapsed .register-form,
+    .register-section.reg-collapsed .register-hint { display: none; }
     .register-header::before { content: ''; display: inline-block; width: 4px; height: 16px; background: #6c63ff; border-radius: 2px; }
     .register-form { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; }
     .form-group { display: flex; flex-direction: column; gap: 5px; }
@@ -254,6 +281,7 @@
     .btn-export.dept-export { background: #e17055; }
     .btn-export.dept-export:hover { background: #c0392b; }
     .btn-export.dept-export:disabled { background: #bbb; cursor: not-allowed; opacity: .7; }
+    .crossed { text-decoration: line-through; color: #aaa; }
     /* ── 과/담당자 불일치 에러 ── */
     .cell-mismatch { border-color: #ff6b6b !important; background: #fff0f0 !important; box-shadow: 0 0 0 2px rgba(255,107,107,.2) !important; }
     .mismatch-msg { display: block; color: #e74c3c; font-size: .68rem; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -418,6 +446,10 @@
 
   const DEFAULT_DEPTS = ['성형기술1과', '성형기술2과', '성형기획과'];
   const CATEGORIES = ['경영층 지시', '센터장 지시', '실장 지시', '부서'];
+  const RATINGS = ['Good', 'Poor', 'Bad', '미결 완료'];
+  function ratingClass(r) {
+    return { 'Good':'good', 'Poor':'poor', 'Bad':'bad', '미결 완료':'unresolved' }[r] || '';
+  }
 
   /* ── ID 생성 ── */
   function genId() {
@@ -692,7 +724,10 @@
 
   /* ── 진행현황 ── */
   function computeStatus(todo) {
-    if (todo.completeDateChanged) return { color:'gray', dot:true, text:'(목표일 변경)' };
+    if (todo.completeDateChanged) return { color:'gray', dot:false, text:'목표일 변경', big:true };
+    if (!todo.completeDate && (!todo.deptId || !todo.dueDate)) {
+      return { color:'orange', dot:true, text:'(지정 필요)' };
+    }
     if (todo.completeDate) {
       if (!todo.dueDate) return { color:'green', dot:false, text:'완료(ok)' };
       const comp = new Date(todo.completeDate); comp.setHours(0,0,0,0);
@@ -716,7 +751,8 @@
     todos = (d.todos || []).map(t => ({
       ...t,
       deptId:   t.deptId   !== undefined ? t.deptId   : '',
-      memberId: t.memberId !== undefined ? t.memberId : ''
+      memberId: t.memberId !== undefined ? t.memberId : '',
+      rating:   t.rating   || ''
     }));
     dailyCounts = d.dailyCounts || {};
     departments = d.departments || [];
@@ -785,7 +821,7 @@
       baseSerial: generateBaseSerial(),
       subSerial: 0,
       category, text, deptId: deptId||'', memberId: memberId||'', dueDate,
-      completeDate: '', completeDateChanged: false
+      completeDate: '', completeDateChanged: false, rating: ''
     });
     save(); render();
   }
@@ -831,10 +867,20 @@
   function uncompleteTodo(baseSerial) {
     pushHistory();
     todos.forEach(t => {
-      if (t.baseSerial === baseSerial && t.completeDate && !t.completeDateChanged) {
-        t.completeDate = '';
+      if (t.baseSerial === baseSerial) {
+        if (t.completeDate && !t.completeDateChanged) t.completeDate = '';
+        t.rating = '';
       }
     });
+    save(); render();
+  }
+
+  function setRating(baseSerial, ratingValue) {
+    const group = todos.filter(t => t.baseSerial === baseSerial)
+      .sort((a, b) => a.subSerial - b.subSerial);
+    if (!group.length || group[0].rating) return;
+    pushHistory();
+    group[0].rating = ratingValue;
     save(); render();
   }
 
@@ -913,8 +959,9 @@
   function makeDeptSelect(selectedDeptId) {
     const sel = document.createElement('select');
     sel.className = 'cell-input cell-select';
+    if (!selectedDeptId) sel.classList.add('cell-unset');
     const blank = document.createElement('option');
-    blank.value = ''; blank.textContent = '-- 과 --';
+    blank.value = ''; blank.textContent = selectedDeptId ? '-- 과 --' : '지정 필요';
     sel.appendChild(blank);
     departments.forEach(d => {
       const o = document.createElement('option');
@@ -951,6 +998,7 @@
     if (st.text) {
       const lbl = document.createElement('span');
       lbl.className = 'status-label ' + st.color;
+      if (st.big) lbl.style.fontSize = 'calc(.68rem + 2pt)';
       lbl.textContent = st.text;
       wrap.appendChild(lbl);
     }
@@ -1055,6 +1103,7 @@
     // 미완료: 지연중(0)→임박(1)→진행(2)→기타(3) 순, 동순위는 일련번호 오름차순
     function activeStatusPriority(todo) {
       const st = computeStatus(todo);
+      if (st.color === 'orange') return -1;
       if (st.color === 'red'    && st.dot) return 0;
       if (st.color === 'yellow' && st.dot) return 1;
       if (st.color === 'green'  && st.dot) return 2;
@@ -1115,9 +1164,16 @@
       tdSerial.className = 'col-serial';
       const serialWrap = document.createElement('span');
       serialWrap.className = 'serial-plain';
-      if (todo.subSerial > 0) serialWrap.classList.add('serial-derived');
+      if (todo.subSerial > 0) {
+        const indentEl = document.createElement('span');
+        indentEl.className = 'serial-indent';
+        indentEl.textContent = '└';
+        serialWrap.appendChild(indentEl);
+      }
       if (inDone) {
-        serialWrap.textContent = todo.baseSerial + '-' + String(todo.subSerial).padStart(2,'0');
+        const textEl = document.createElement('span');
+        textEl.textContent = todo.baseSerial + '-' + String(todo.subSerial).padStart(2,'0');
+        serialWrap.appendChild(textEl);
       } else {
         const yyIn = document.createElement('input');
         yyIn.className = 'serial-yymmdd'; yyIn.maxLength = 6;
@@ -1141,14 +1197,25 @@
       }
       tdSerial.appendChild(serialWrap);
 
-      /* ── 구분 ── */
-      const tdCat = document.createElement('td');
-      tdCat.className = 'col-category';
-      if (inDone) {
-        tdCat.appendChild(makeReadonly(todo.category));
-      } else {
-        tdCat.appendChild(makeCategorySelect(todo.category, () =>
-          updateField(todo.id, 'category', tdCat.querySelector('select').value)));
+      /* ── 구분 (그룹 첫 행만, rowspan 적용) ── */
+      let tdCat = null;
+      if (isFirst) {
+        tdCat = document.createElement('td');
+        tdCat.className = 'col-category';
+        if (gSize > 1) tdCat.rowSpan = gSize;
+        if (inDone) {
+          tdCat.appendChild(makeReadonly(todo.category));
+        } else {
+          const bs = todo.baseSerial;
+          tdCat.appendChild(makeCategorySelect(todo.category, () => {
+            const newCat = tdCat.querySelector('select').value;
+            const group = todos.filter(t => t.baseSerial === bs);
+            if (!group.some(t => t.category !== newCat)) return;
+            pushHistory();
+            group.forEach(t => { t.category = newCat; });
+            save(); render();
+          }));
+        }
       }
 
       /* ── 할일 (그룹 첫 행만, rowspan 적용) ── */
@@ -1183,6 +1250,11 @@
       if (inDone) {
         tdDept.appendChild(makeReadonly(getDeptName(todo.deptId)));
         tdMember.appendChild(makeReadonly(getMemberDisplay(todo.memberId)));
+      } else if (todo.completeDateChanged) {
+        const dR = makeReadonly(getDeptName(todo.deptId));
+        const mR = makeReadonly(getMemberDisplay(todo.memberId));
+        dR.classList.add('crossed'); mR.classList.add('crossed');
+        tdDept.appendChild(dR); tdMember.appendChild(mR);
       } else {
         const deptSel = makeDeptSelect(todo.deptId);
         const memberSel = makeMemberSelect(todo.deptId, todo.memberId);
@@ -1222,9 +1294,20 @@
         tdDue.appendChild(makeReadonly(todo.dueDate || '', 'date-val'));
       } else if (todo.completeDateChanged) {
         const span = document.createElement('span');
-        span.className = 'date-readonly';
+        span.className = 'date-readonly crossed';
         span.textContent = todo.dueDate || '';
         tdDue.appendChild(span);
+      } else if (!todo.dueDate) {
+        const reqSpan = document.createElement('span');
+        reqSpan.className = 'required-placeholder';
+        reqSpan.textContent = '지정 필요';
+        const dateIn = document.createElement('input');
+        dateIn.type = 'date';
+        dateIn.className = 'cell-input';
+        dateIn.addEventListener('change', () => {
+          if (dateIn.value) updateField(todo.id, 'dueDate', dateIn.value);
+        });
+        tdDue.append(reqSpan, dateIn);
       } else {
         tdDue.appendChild(makeInput('date', todo.dueDate, '', '',
           () => updateField(todo.id, 'dueDate', tdDue.querySelector('input').value)));
@@ -1262,6 +1345,42 @@
       const tdExt = document.createElement('td');
       tdExt.className = 'col-ext';
       if (inDone) {
+        if (isFirst) {
+          const groupFirst = todos.filter(t => t.baseSerial === todo.baseSerial)
+            .sort((a, b) => a.subSerial - b.subSerial)[0];
+          const currentRating = groupFirst?.rating || '';
+          if (currentRating) {
+            const badge = document.createElement('span');
+            badge.className = 'rating-badge ' + ratingClass(currentRating);
+            badge.textContent = currentRating;
+            tdExt.appendChild(badge);
+          } else {
+            let ridx = 0;
+            const selDiv = document.createElement('div');
+            selDiv.className = 'rating-selector';
+            const navDiv = document.createElement('div');
+            navDiv.className = 'rating-nav';
+            const btnL = document.createElement('button');
+            btnL.type = 'button'; btnL.className = 'btn-rate-nav'; btnL.textContent = '◀';
+            const curSpan = document.createElement('span');
+            const btnR = document.createElement('button');
+            btnR.type = 'button'; btnR.className = 'btn-rate-nav'; btnR.textContent = '▶';
+            function refreshCur() {
+              const r = RATINGS[ridx];
+              curSpan.className = 'rating-cur ' + ratingClass(r);
+              curSpan.textContent = r;
+            }
+            refreshCur();
+            btnL.addEventListener('click', () => { ridx = (ridx - 1 + RATINGS.length) % RATINGS.length; refreshCur(); });
+            btnR.addEventListener('click', () => { ridx = (ridx + 1) % RATINGS.length; refreshCur(); });
+            navDiv.append(btnL, curSpan, btnR);
+            const btnOk = document.createElement('button');
+            btnOk.type = 'button'; btnOk.className = 'btn-rate-confirm'; btnOk.textContent = '확정';
+            btnOk.addEventListener('click', () => setRating(todo.baseSerial, RATINGS[ridx]));
+            selDiv.append(navDiv, btnOk);
+            tdExt.appendChild(selDiv);
+          }
+        }
         const btnUncomplete = document.createElement('button');
         btnUncomplete.className = 'btn-uncomplete';
         btnUncomplete.textContent = '미완료처리';
@@ -1287,7 +1406,7 @@
 
       /* ── Tab 이동 (활성 행) ── */
       if (!inDone) {
-        const tabCells = [tdCat, ...(tdTask ? [tdTask] : []), tdDept, tdMember, tdDue, tdComp];
+        const tabCells = [...(tdCat ? [tdCat] : []), ...(tdTask ? [tdTask] : []), tdDept, tdMember, tdDue, tdComp];
         const tabEls = tabCells.map(td => td.querySelector('input,select,textarea')).filter(Boolean);
         tabEls.forEach((el, ci) => {
           el.addEventListener('keydown', e => {
@@ -1301,7 +1420,7 @@
 
       /* ── 행 조립 ── */
       tr.appendChild(tdSerial);
-      tr.appendChild(tdCat);
+      if (tdCat) tr.appendChild(tdCat);
       if (tdTask) tr.appendChild(tdTask);
       tr.appendChild(tdDept);
       tr.appendChild(tdMember);
@@ -1742,6 +1861,21 @@
   document.getElementById('alarm-modal-overlay').addEventListener('click', e => {
     if (e.target === document.getElementById('alarm-modal-overlay')) closeAlarmModal();
   });
+
+  /* ── 등록 영역 접기/펼치기 ── */
+  const regSection = document.querySelector('.register-section');
+  const regHeader  = document.querySelector('.register-header');
+  const regToggle  = document.createElement('span');
+  regToggle.className = 'register-toggle';
+  regHeader.appendChild(regToggle);
+
+  function setRegCollapsed(v) {
+    regSection.classList.toggle('reg-collapsed', v);
+    regToggle.textContent = v ? '▼ 펼치기' : '▲ 접기';
+  }
+  regHeader.addEventListener('click', () =>
+    setRegCollapsed(!regSection.classList.contains('reg-collapsed')));
+  setRegCollapsed(true);
 
   async function initApp() {
     await load();
