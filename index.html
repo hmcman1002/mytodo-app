@@ -6,18 +6,22 @@
   <title>할일 목록</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    html {
+      /* 1500px 기준 설계 → 1rem=15px, 모니터 크기에 따라 비례 확대/축소 */
+      font-size: clamp(10px, 1vw, 20px);
+    }
     html, body {
       height: 100%; overflow: hidden;
       font-family: 'Segoe UI', sans-serif; background: #f0f2f5;
     }
-    body { display: flex; align-items: stretch; justify-content: center; padding: 20px; }
+    body { display: flex; align-items: stretch; justify-content: center; padding: 1.3rem; }
 
     .app {
       background: #fff; border-radius: 16px;
       box-shadow: 0 4px 24px rgba(0,0,0,0.1);
       width: 100%; max-width: 1500px;
       display: flex; flex-direction: column;
-      overflow: hidden; padding: 24px 28px 0;
+      overflow: hidden; padding: 1.6rem 1.87rem 0;
     }
 
     h1 { font-size: 1.6rem; font-weight: 700; color: #1a1a2e; margin-bottom: 16px; }
@@ -90,16 +94,16 @@
     tbody td { padding: 3px 3px; vertical-align: middle; }
 
     /* Column widths */
-    .col-serial       { width: 140px; text-align: center; }
-    .col-category     { width: 112px; }
-    .col-task         { min-width: 200px; word-break: break-word; }
-    .col-dept         { width: 110px; }
-    .col-member       { width: 130px; }
-    .col-duedate      { width: 120px; }
-    .col-completedate { width: 145px; }
-    .col-status       { width: 108px; text-align: center; }
-    .col-del          { width: 36px; text-align: center; }
-    .col-ext          { width: 76px; text-align: center; }
+    .col-serial       { width: 9.3rem; text-align: center; }
+    .col-category     { width: 7.5rem; }
+    .col-task         { min-width: 13.3rem; word-break: break-word; }
+    .col-dept         { width: 7.3rem; }
+    .col-member       { width: 8.7rem; }
+    .col-duedate      { width: 8rem; }
+    .col-completedate { width: 9.7rem; }
+    .col-status       { width: 7.2rem; text-align: center; }
+    .col-del          { width: 2.4rem; text-align: center; }
+    .col-ext          { width: 5rem; text-align: center; }
 
     /* ── Serial ── */
     .serial-plain {
@@ -153,7 +157,7 @@
 
     /* ── 진행현황 ── */
     .traffic-light { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 3px 0; }
-    .tl-dot { display: inline-block; width: 16px; height: 16px; border-radius: 50%; }
+    .tl-dot { display: inline-block; width: 1rem; height: 1rem; border-radius: 50%; }
     .tl-dot.gray   { background: #b0b0b0; }
     .tl-dot.red    { background: #E8000D; box-shadow: 0 0 5px rgba(232,0,13,.5); }
     .tl-dot.yellow { background: #FFC200; box-shadow: 0 0 5px rgba(255,194,0,.55); }
@@ -193,8 +197,8 @@
     /* ── 할일 등록 폼 ── */
     .register-section {
       flex-shrink: 0; background: #f4f3ff;
-      border-top: 3px solid #6c63ff; margin: 0 -28px;
-      padding: 18px 28px 22px; border-radius: 0 0 16px 16px;
+      border-top: 3px solid #6c63ff; margin: 0 -1.87rem;
+      padding: 1.2rem 1.87rem 1.47rem; border-radius: 0 0 1rem 1rem;
     }
     .register-header { font-size: .95rem; font-weight: 700; color: #6c63ff; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
     .register-header::before { content: ''; display: inline-block; width: 4px; height: 16px; background: #6c63ff; border-radius: 2px; }
@@ -209,15 +213,15 @@
     }
     .form-control:focus { border-color: #6c63ff; box-shadow: 0 0 0 3px rgba(108,99,255,.13); }
     .form-control.error { border-color: #ff6b6b; }
-    .fg-category { width: 130px; }
-    .fg-task     { flex: 1; min-width: 200px; }
-    .fg-dept     { width: 130px; }
-    .fg-member   { width: 175px; }
-    .fg-duedate  { width: 148px; }
+    .fg-category { width: 8.7rem; }
+    .fg-task     { flex: 1; min-width: 13.3rem; }
+    .fg-dept     { width: 8.7rem; }
+    .fg-member   { width: 11.7rem; }
+    .fg-duedate  { width: 9.9rem; }
     .btn-register {
       background: #6c63ff; color: #fff; border: none; border-radius: 8px;
       padding: 0 24px; font-size: .87rem; font-weight: 600; cursor: pointer;
-      height: 38px; transition: background .2s; white-space: nowrap;
+      height: 2.5rem; transition: background .2s; white-space: nowrap;
     }
     .btn-register:hover { background: #574fd6; }
     .register-hint { margin-top: 8px; font-size: .8rem; color: #ff6b6b; min-height: 1.2em; }
@@ -232,8 +236,8 @@
     .modal-panel {
       background: #fff; border-radius: 14px;
       box-shadow: 0 8px 40px rgba(0,0,0,.28);
-      width: 520px; max-width: 95vw; max-height: 82vh;
-      overflow-y: auto; padding: 24px;
+      width: 34.7rem; max-width: 95vw; max-height: 82vh;
+      overflow-y: auto; padding: 1.6rem;
     }
     .modal-header {
       display: flex; justify-content: space-between; align-items: center;
@@ -246,6 +250,27 @@
     .dept-tab.active { background: #6c63ff; border-color: #6c63ff; color: #fff; font-weight: 600; }
     .dept-tab.add-tab { border-style: dashed; color: #6c63ff; border-color: #6c63ff; }
     .dept-tab.add-tab:hover { background: #f4f3ff; }
+
+    .btn-export.dept-export { background: #e17055; }
+    .btn-export.dept-export:hover { background: #c0392b; }
+    .btn-export.dept-export:disabled { background: #bbb; cursor: not-allowed; opacity: .7; }
+    /* ── 과/담당자 불일치 에러 ── */
+    .cell-mismatch { border-color: #ff6b6b !important; background: #fff0f0 !important; box-shadow: 0 0 0 2px rgba(255,107,107,.2) !important; }
+    .mismatch-msg { display: block; color: #e74c3c; font-size: .68rem; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    /* ── 알림 ── */
+    @keyframes slideInToast { from { transform: translateX(110%); opacity:0; } to { transform: translateX(0); opacity:1; } }
+    @keyframes popIn { from { transform: scale(.8); opacity:0; } to { transform: scale(1); opacity:1; } }
+    .alarm-notify-overlay { position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:99999; display:flex; align-items:center; justify-content:center; }
+    .alarm-notify-box { background:#fff; border-radius:1rem; padding:2rem 2.5rem; text-align:center; max-width:26rem; width:90vw; box-shadow:0 16px 48px rgba(0,0,0,.4); animation:popIn .3s ease; }
+    .alarm-notify-icon { font-size:3rem; margin-bottom:.8rem; }
+    .alarm-notify-title { font-size:1.3rem; font-weight:700; color:#1a1a2e; margin-bottom:.7rem; }
+    .alarm-notify-msg { font-size:.9rem; color:#555; margin-bottom:1.5rem; line-height:1.6; }
+    .alarm-notify-btn { background:#6c63ff; color:#fff; border:none; border-radius:.5rem; padding:.8rem 2rem; font-size:.95rem; font-weight:600; cursor:pointer; transition:background .2s; }
+    .alarm-notify-btn:hover { background:#574fd6; }
+    .btn-alarm { background: none; border: 1.5px solid #ccc; border-radius: 8px; padding: 5px 12px; font-size: .82rem; color: #666; cursor: pointer; font-weight: 600; transition: all .18s; white-space: nowrap; }
+    .btn-alarm:hover { border-color: #6c63ff; color: #6c63ff; background: #f4f3ff; }
+    .btn-alarm.has-alarm { border-color: #6c63ff; background: #6c63ff; color: #fff; }
+    .btn-alarm.has-alarm:hover { background: #574fd6; }
     .dept-name-row { display: flex; gap: 8px; align-items: center; margin-bottom: 14px; flex-wrap: wrap; }
     .dept-name-input { flex: 1; min-width: 120px; }
     .btn-modal-action { background: #6c63ff; color: #fff; border: none; border-radius: 7px; padding: 8px 14px; font-size: .84rem; cursor: pointer; white-space: nowrap; transition: background .18s; }
@@ -270,13 +295,10 @@
   </div>
 
   <div class="toolbar">
-    <div class="filters">
-      <button class="filter-btn active" data-filter="all">전체</button>
-      <button class="filter-btn" data-filter="active">미완료</button>
-      <button class="filter-btn" data-filter="done">완료</button>
-    </div>
+    <div class="filters" id="filters-bar"></div>
     <div class="right-tools">
       <span class="stats" id="stats-text"></span>
+      <button class="btn-alarm" id="btn-alarm">⏰ 알림</button>
       <button class="btn-members" id="btn-members">과원 등록</button>
       <button class="btn-undo" id="btn-undo" disabled>
         ↩ 되돌리기 <span class="undo-count" id="undo-count">0</span>
@@ -291,6 +313,7 @@
       <div class="export-btns">
         <button id="btn-export-all" class="btn-export">엑셀 저장 (완료 포함)</button>
         <button id="btn-export-active" class="btn-export exclude">엑셀 저장 (완료 제외)</button>
+        <button id="btn-export-dept" class="btn-export dept-export" disabled>과별 엑셀 저장</button>
       </div>
     </div>
     <div class="table-wrapper">
@@ -355,6 +378,11 @@
   <div class="modal-panel" id="modal-panel"></div>
 </div>
 
+<!-- 알림 설정 모달 -->
+<div class="modal-overlay" id="alarm-modal-overlay">
+  <div class="modal-panel" id="alarm-modal-panel" style="max-width:400px"></div>
+</div>
+
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
   import {
@@ -385,6 +413,8 @@
   let members = [];
   let filter = 'all';
   let modalActiveDeptId = null;
+  let deptFilter = '';
+  let visibleTodos = [];
 
   const DEFAULT_DEPTS = ['성형기술1과', '성형기술2과', '성형기획과'];
   const CATEGORIES = ['경영층 지시', '센터장 지시', '실장 지시', '부서'];
@@ -482,7 +512,42 @@
   }
   function closeModal() {
     document.getElementById('modal-overlay').classList.remove('open');
-    populateRegDeptSelect(); render();
+    populateDeptFilterBar(); populateRegDeptSelect(); render();
+  }
+
+  function updateDeptExportBtn() {
+    const btn = document.getElementById('btn-export-dept');
+    if (!btn) return;
+    btn.disabled = !deptFilter;
+    const dept = departments.find(d => d.id === deptFilter);
+    btn.textContent = deptFilter ? (dept ? dept.name : '') + ' 엑셀 저장' : '과별 엑셀 저장';
+  }
+
+  function populateDeptFilterBar() {
+    const bar = document.getElementById('filters-bar');
+    if (!bar) return;
+    bar.innerHTML = '';
+
+    const defs = [
+      { label: '전체',  f: 'all',    d: '' },
+      { label: '미완료', f: 'active', d: '' },
+      { label: '완료',  f: 'done',   d: '' },
+    ];
+    departments.forEach(dept => defs.push({ label: dept.name + ' 미완료', f: 'active', d: dept.id }));
+
+    defs.forEach(({ label, f, d }) => {
+      const btn = document.createElement('button');
+      btn.className = 'filter-btn';
+      const isActive = d ? deptFilter === d : (!deptFilter && filter === f);
+      if (isActive) btn.classList.add('active');
+      btn.textContent = label;
+      btn.addEventListener('click', () => {
+        filter = f; deptFilter = d;
+        populateDeptFilterBar(); render();
+      });
+      bar.appendChild(btn);
+    });
+    updateDeptExportBtn();
   }
 
   function renderModal() {
@@ -590,7 +655,7 @@
     mNameInput.placeholder = '과원 이름'; mNameInput.style.flex = '1'; mNameInput.style.minWidth = '100px';
     const mPosSelect = document.createElement('select');
     mPosSelect.className = 'form-control';
-    ['매니저', '책임매니저'].forEach(p => {
+    ['과장', '책임', '매니저'].forEach(p => {
       const o = document.createElement('option'); o.value = p; o.textContent = p;
       mPosSelect.appendChild(o);
     });
@@ -892,6 +957,39 @@
     return wrap;
   }
 
+  /* ── 셀렉트 글자 크기 자동 조정 ── */
+  const _szCanvas = document.createElement('canvas');
+  const _szCtx = _szCanvas.getContext('2d');
+
+  function adjustSelectFontSizes() {
+    const rootFs = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    const basePx = rootFs * 0.85; // 현재 뷰포트 기준 0.85rem 실제 px
+    const minPx  = rootFs * 0.55; // 최소 0.55rem
+
+    document.querySelectorAll('#todo-body .cell-select').forEach(sel => {
+      const idx = sel.selectedIndex;
+      const text = idx >= 0 ? (sel.options[idx]?.text || '') : '';
+      if (!text || text.startsWith('--') || text === '구분 선택') {
+        sel.style.fontSize = '';
+        return;
+      }
+      const availWidth = sel.clientWidth - 28;
+      _szCtx.font = `${basePx}px 'Segoe UI', sans-serif`;
+      if (_szCtx.measureText(text).width <= availWidth) {
+        sel.style.fontSize = ''; // 텍스트가 충분히 들어오면 CSS rem 값 복원
+        return;
+      }
+      let fs = basePx;
+      for (; fs >= minPx; fs -= 0.5) {
+        _szCtx.font = `${fs}px 'Segoe UI', sans-serif`;
+        if (_szCtx.measureText(text).width <= availWidth) break;
+      }
+      sel.style.fontSize = Math.max(minPx, fs).toFixed(1) + 'px';
+    });
+  }
+
+  window.addEventListener('resize', () => requestAnimationFrame(adjustSelectFontSizes));
+
   /* ── 등록 폼 과/담당자 ── */
   const regCatEl    = document.getElementById('reg-category');
   const regDeptEl   = document.getElementById('reg-dept');
@@ -953,14 +1051,39 @@
     const completed = todos
       .filter(t => completedBases.has(t.baseSerial))
       .sort((a, b) => a.baseSerial.localeCompare(b.baseSerial) || (a.subSerial - b.subSerial));
-    const sorted = [...active, ...completed];
+
+    // 미완료: 지연중(0)→임박(1)→진행(2)→기타(3) 순, 동순위는 일련번호 오름차순
+    function activeStatusPriority(todo) {
+      const st = computeStatus(todo);
+      if (st.color === 'red'    && st.dot) return 0;
+      if (st.color === 'yellow' && st.dot) return 1;
+      if (st.color === 'green'  && st.dot) return 2;
+      return 3;
+    }
+    const activeGroupMap = {};
+    active.forEach(t => {
+      (activeGroupMap[t.baseSerial] = activeGroupMap[t.baseSerial] || []).push(t);
+    });
+    Object.values(activeGroupMap).forEach(g => g.sort((a, b) => a.subSerial - b.subSerial));
+    const sortedActive = Object.entries(activeGroupMap)
+      .sort(([keyA, grpA], [keyB, grpB]) => {
+        const getCur = grp => grp.find(t => !t.completeDateChanged && !t.completeDate) || grp[grp.length - 1];
+        const pa = activeStatusPriority(getCur(grpA));
+        const pb = activeStatusPriority(getCur(grpB));
+        if (pa !== pb) return pa - pb;
+        return keyA.localeCompare(keyB);
+      })
+      .flatMap(([, g]) => g);
+    const sorted = [...sortedActive, ...completed];
 
     const visible = sorted.filter(t => {
       const inDone = completedBases.has(t.baseSerial);
+      if (deptFilter) return !inDone && t.deptId === deptFilter;
       if (filter === 'done')   return inDone;
       if (filter === 'active') return !inDone;
       return true;
     });
+    visibleTodos = visible;
 
     /* 그룹별 보이는 행 수 (할일 셀 rowspan 계산) */
     const groupCount = {};
@@ -1063,6 +1186,22 @@
       } else {
         const deptSel = makeDeptSelect(todo.deptId);
         const memberSel = makeMemberSelect(todo.deptId, todo.memberId);
+
+        // 과/담당자 불일치 검사
+        if (todo.memberId) {
+          const mm = members.find(m => m.id === todo.memberId);
+          if (mm && mm.deptId !== todo.deptId) {
+            const mDept = departments.find(d => d.id === mm.deptId);
+            const errMsg = `⚠ "${mm.name}"은(는) "${mDept ? mDept.name : '다른 과'}" 소속입니다`;
+            deptSel.classList.add('cell-mismatch'); deptSel.title = errMsg;
+            memberSel.classList.add('cell-mismatch'); memberSel.title = errMsg;
+            const errSpan = document.createElement('span');
+            errSpan.className = 'mismatch-msg';
+            errSpan.textContent = '⚠ ' + mm.name + (mDept ? ' (' + mDept.name + ')' : '');
+            tdMember.appendChild(errSpan);
+          }
+        }
+
         deptSel.addEventListener('change', () => {
           const t = todos.find(x => x.id === todo.id);
           if (!t) return;
@@ -1180,6 +1319,7 @@
     fillEl.style.width = pct + '%';
     statsEl.textContent = `전체 ${total}개 · 완료 ${done}개 (${pct}%)`;
     emptyEl.style.display = visible.length ? 'none' : 'block';
+    requestAnimationFrame(adjustSelectFontSizes);
   }
 
   /* ── 등록 폼 이벤트 ── */
@@ -1212,14 +1352,6 @@
     if (e.key === 'Enter') document.getElementById('btn-register').click();
   });
 
-  document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      filter = btn.dataset.filter;
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      render();
-    });
-  });
 
   /* ── Excel 내보내기 ── */
   function escapeXml(s) {
@@ -1293,6 +1425,54 @@
   document.getElementById('btn-export-all').addEventListener('click', () => exportToExcel(true));
   document.getElementById('btn-export-active').addEventListener('click', () => exportToExcel(false));
 
+  function exportDeptExcel() {
+    if (!deptFilter || !visibleTodos.length) return;
+    const dept = departments.find(d => d.id === deptFilter);
+    const deptName = dept ? dept.name : '';
+    const headers = ['일련번호', '구분', '할일', '과', '담당자', '목표일', '완료일', '진행현황'];
+    let xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
+      + '<?mso-application progid="Excel.Sheet"?>\n'
+      + '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"'
+      + ' xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">\n'
+      + '<Styles>'
+      + '<Style ss:ID="h"><Alignment ss:Horizontal="Center"/>'
+      + '<Interior ss:Color="#E17055" ss:Pattern="Solid"/>'
+      + '<Font ss:Color="#FFFFFF" ss:Bold="1"/></Style>'
+      + '</Styles>\n'
+      + '<Worksheet ss:Name="' + escapeXml(deptName) + '_미완료"><Table>\n';
+    xml += '<Row ss:Height="20">';
+    headers.forEach(h => {
+      xml += `<Cell ss:StyleID="h"><Data ss:Type="String">${escapeXml(h)}</Data></Cell>`;
+    });
+    xml += '</Row>\n';
+    visibleTodos.forEach(t => {
+      const st = computeStatus(t);
+      const serial = t.baseSerial + '-' + String(t.subSerial).padStart(2,'0');
+      const completeVal = t.completeDateChanged ? (t.completeDate + ' (변경일)') : (t.completeDate || '');
+      const cells = [serial, t.category||'', t.text||'',
+        getDeptName(t.deptId), getMemberDisplay(t.memberId),
+        t.dueDate||'', completeVal, st.text||''];
+      xml += '<Row>';
+      cells.forEach(v => { xml += `<Cell><Data ss:Type="String">${escapeXml(v)}</Data></Cell>`; });
+      xml += '</Row>\n';
+    });
+    xml += '</Table></Worksheet></Workbook>';
+    const blob = new Blob(['﻿' + xml], { type: 'application/vnd.ms-excel' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    const d = new Date();
+    const ts = String(d.getFullYear()).slice(2)
+      + String(d.getMonth()+1).padStart(2,'0')
+      + String(d.getDate()).padStart(2,'0')
+      + String(d.getHours()).padStart(2,'0')
+      + String(d.getMinutes()).padStart(2,'0');
+    a.download = `${deptName}_미완료_${ts}.xls`;
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a); URL.revokeObjectURL(url);
+  }
+  document.getElementById('btn-export-dept').addEventListener('click', exportDeptExcel);
+
   document.getElementById('btn-members').addEventListener('click', openModal);
   document.getElementById('modal-overlay').addEventListener('click', e => {
     if (e.target === document.getElementById('modal-overlay')) closeModal();
@@ -1300,10 +1480,280 @@
   document.getElementById('clear-done').addEventListener('click', clearDone);
   document.getElementById('btn-undo').addEventListener('click', undo);
 
+  /* ── 자동 알림 ── */
+  const ALARM_KEY = 'todo_alarms_v1';
+  let alarmSettings = { alarms: [{ enabled: false, time: '09:00' }, { enabled: false, time: '17:30' }] };
+  let alarmsFiredToday = {};
+
+  function loadAlarmSettings() {
+    try {
+      const s = JSON.parse(localStorage.getItem(ALARM_KEY) || 'null');
+      if (s && Array.isArray(s.alarms)) alarmSettings = s;
+    } catch(e) {}
+    updateAlarmBtn();
+  }
+
+  function saveAlarmSettings() {
+    localStorage.setItem(ALARM_KEY, JSON.stringify(alarmSettings));
+    updateAlarmBtn();
+  }
+
+  function updateAlarmBtn() {
+    const btn = document.getElementById('btn-alarm');
+    if (!btn) return;
+    const anyOn = alarmSettings.alarms.some(a => a.enabled);
+    btn.classList.toggle('has-alarm', anyOn);
+    btn.title = anyOn
+      ? '알림 설정됨: ' + alarmSettings.alarms.filter(a => a.enabled).map(a => a.time).join(', ')
+      : '알림 설정 없음';
+  }
+
+  async function requestNotificationPermission() {
+    if (!('Notification' in window)) return false;
+    if (Notification.permission === 'granted') return true;
+    if (Notification.permission === 'denied') return false;
+    const r = await Notification.requestPermission();
+    return r === 'granted';
+  }
+
+  function playAlarmSound() {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      [0, 0.35, 0.7].forEach(delay => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.frequency.value = 880; osc.type = 'sine';
+        gain.gain.setValueAtTime(0.25, ctx.currentTime + delay);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + 0.6);
+        osc.start(ctx.currentTime + delay);
+        osc.stop(ctx.currentTime + delay + 0.6);
+      });
+    } catch(e) {}
+  }
+
+  function showAlarmToast(message) {
+    const old = document.getElementById('alarm-notify-overlay');
+    if (old) old.remove();
+    const overlay = document.createElement('div');
+    overlay.id = 'alarm-notify-overlay';
+    overlay.className = 'alarm-notify-overlay';
+    const box = document.createElement('div');
+    box.className = 'alarm-notify-box';
+    box.innerHTML =
+      '<div class="alarm-notify-icon">📋</div>' +
+      '<div class="alarm-notify-title">할일 목록 알림</div>' +
+      '<div class="alarm-notify-msg">' + message + '</div>' +
+      '<button class="alarm-notify-btn" id="alarm-notify-close">확인</button>';
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+    document.getElementById('alarm-notify-close').addEventListener('click', () => overlay.remove());
+
+    // 탭 타이틀 점멸
+    let flash = false;
+    const orig = document.title;
+    const ti = setInterval(() => { document.title = flash ? '📋 할일 알림!' : orig; flash = !flash; }, 800);
+    setTimeout(() => { clearInterval(ti); document.title = orig; if (overlay.parentElement) overlay.remove(); }, 60000);
+  }
+
+  function checkAlarms(catchUp = 0) {
+    for (let offset = 0; offset <= catchUp; offset++) {
+      const t = new Date(Date.now() - offset * 60000);
+      const hhmm = String(t.getHours()).padStart(2,'0') + ':' + String(t.getMinutes()).padStart(2,'0');
+      const dateKey = t.getFullYear() + '-' + String(t.getMonth()+1).padStart(2,'0') + '-' + String(t.getDate()).padStart(2,'0');
+      alarmSettings.alarms.forEach((alarm, idx) => {
+        if (!alarm.enabled || alarm.time !== hhmm) return;
+        const key = idx + '_' + dateKey;
+        if (alarmsFiredToday[key]) return;
+        alarmsFiredToday[key] = true;
+        fireAlarm();
+      });
+    }
+  }
+
+  function fireAlarm() {
+    const cBases = new Set(todos.filter(t => t.completeDate && !t.completeDateChanged).map(t => t.baseSerial));
+    const active = todos.filter(t => !cBases.has(t.baseSerial));
+    const delayed = active.filter(t => { const s = computeStatus(t); return s.color === 'red' && s.dot; });
+    const msg = delayed.length > 0
+      ? `미완료 ${active.length}개 · 지연중 ${delayed.length}개 있습니다.`
+      : `미완료 할일이 ${active.length}개 있습니다.`;
+    playAlarmSound();
+    showAlarmToast(msg);
+  }
+
+  /* 알림 모달 */
+  function generateSchedulerScript() {
+    // 현재 파일의 Windows 경로 추출
+    let winPath = decodeURIComponent(location.pathname);
+    if (/^\/[A-Za-z]:/.test(winPath)) winPath = winPath.slice(1);
+    winPath = winPath.replace(/\//g, '\\');
+
+    let taskBlocks = '';
+    alarmSettings.alarms.forEach((a, i) => {
+      const num = i + 1;
+      if (a.enabled) {
+        taskBlocks +=
+          '\r\n# 알람 ' + num + ': ' + a.time + '\r\n' +
+          '$arg' + num + ' = "`"$htmlFile`""\r\n' +
+          '$act' + num + ' = New-ScheduledTaskAction -Execute $browser -Argument $arg' + num + '\r\n' +
+          '$trg' + num + ' = New-ScheduledTaskTrigger -Daily -At \'' + a.time + '\'\r\n' +
+          'Register-ScheduledTask -TaskName \'할일목록_자동열기_' + num + '\' -Action $act' + num + ' -Trigger $trg' + num + ' -Force | Out-Null\r\n' +
+          'Write-Host "  ✔ 알람 ' + num + ' (' + a.time + ') 등록 완료" -ForegroundColor Cyan\r\n';
+      } else {
+        taskBlocks += '\r\n# 알람 ' + num + ': 비활성화 (해당 작업 삭제)\r\n';
+      }
+    });
+
+    return (
+      '# ================================================\r\n' +
+      '# 할일목록 자동 열기 - Windows 작업 스케줄러 설정\r\n' +
+      '# 파일을 우클릭 -> "PowerShell로 실행" 하세요\r\n' +
+      '# ================================================\r\n' +
+      'Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force\r\n' +
+      '\r\n' +
+      '$htmlFile = "' + winPath + '"\r\n' +
+      '\r\n' +
+      '# 브라우저 자동 탐색 (Chrome -> Edge 순)\r\n' +
+      '$browser = $null\r\n' +
+      'foreach ($c in @(\r\n' +
+      '    "$env:LOCALAPPDATA\\Google\\Chrome\\Application\\chrome.exe",\r\n' +
+      '    "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",\r\n' +
+      '    "$env:LOCALAPPDATA\\Microsoft\\Edge\\Application\\msedge.exe",\r\n' +
+      '    "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe"\r\n' +
+      ')) { if (Test-Path $c) { $browser = $c; break } }\r\n' +
+      'if (-not $browser) { $browser = "msedge.exe" }\r\n' +
+      'Write-Host "브라우저: $browser"\r\n' +
+      '\r\n' +
+      '# 기존 예약 작업 삭제\r\n' +
+      'foreach ($n in @("할일목록_자동열기_1","할일목록_자동열기_2")) {\r\n' +
+      '    Unregister-ScheduledTask -TaskName $n -Confirm:$false -ErrorAction SilentlyContinue\r\n' +
+      '}\r\n' +
+      taskBlocks +
+      '\r\n' +
+      'Write-Host ""\r\n' +
+      'Write-Host "완료! 작업 스케줄러에서 확인: 시작 -> 작업 스케줄러 -> 할일목록_자동열기_*" -ForegroundColor Green\r\n' +
+      'pause\r\n'
+    );
+  }
+
+  function downloadSchedulerScript() {
+    const content = generateSchedulerScript();
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = '할일목록_자동열기_설정.ps1';
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a); URL.revokeObjectURL(url);
+  }
+
+  function openAlarmModal() { renderAlarmModal(); document.getElementById('alarm-modal-overlay').classList.add('open'); }
+  function closeAlarmModal() { document.getElementById('alarm-modal-overlay').classList.remove('open'); }
+
+  function renderAlarmModal() {
+    const panel = document.getElementById('alarm-modal-panel');
+    panel.innerHTML = '';
+
+    const hdr = document.createElement('div'); hdr.className = 'modal-header';
+    const hdrT = document.createElement('span'); hdrT.textContent = '⏰ 자동 알림 설정';
+    const btnX = document.createElement('button'); btnX.className = 'modal-close'; btnX.textContent = '✕';
+    btnX.addEventListener('click', closeAlarmModal);
+    hdr.append(hdrT, btnX); panel.appendChild(hdr);
+
+    const desc = document.createElement('p');
+    desc.style.cssText = 'font-size:.81rem;color:#888;margin-bottom:16px;line-height:1.6';
+    desc.textContent = '브라우저 탭이 열려 있는 동안 지정 시간에 알림을 표시합니다. 최대 하루 2회까지 설정할 수 있습니다.';
+    panel.appendChild(desc);
+
+    alarmSettings.alarms.forEach((alarm, idx) => {
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex;align-items:center;gap:12px;margin-bottom:12px;padding:12px 16px;background:#f8f7ff;border-radius:10px;border:1.5px solid #e0e0e0';
+      const chk = document.createElement('input');
+      chk.type = 'checkbox'; chk.id = 'ac' + idx; chk.checked = alarm.enabled;
+      chk.style.cssText = 'width:18px;height:18px;cursor:pointer;accent-color:#6c63ff;flex-shrink:0';
+      const lbl = document.createElement('label'); lbl.htmlFor = 'ac' + idx;
+      lbl.textContent = '알림 ' + (idx + 1);
+      lbl.style.cssText = 'font-size:.88rem;font-weight:700;color:#444;cursor:pointer;white-space:nowrap;flex:1';
+      const tim = document.createElement('input');
+      tim.type = 'time'; tim.value = alarm.time; tim.className = 'form-control';
+      tim.style.cssText = 'width:145px;font-size:.9rem;padding:6px 10px;';
+      tim.disabled = !alarm.enabled;
+      chk.addEventListener('change', () => { alarmSettings.alarms[idx].enabled = chk.checked; tim.disabled = !chk.checked; });
+      tim.addEventListener('change', () => { alarmSettings.alarms[idx].time = tim.value; });
+      row.append(chk, lbl, tim); panel.appendChild(row);
+    });
+
+    const permRow = document.createElement('div');
+    permRow.style.cssText = 'display:flex;align-items:flex-start;gap:8px;margin-bottom:18px;padding:10px 14px;border-radius:8px;font-size:.81rem;line-height:1.55;';
+    if (location.protocol === 'file:') {
+      permRow.style.background = '#fff8e1';
+      permRow.style.border = '1.5px solid #ffe082';
+      permRow.innerHTML = '<span style="font-size:1.1rem">⚠️</span><span style="color:#7a5800">로컬 파일은 브라우저 알림을 지원하지 않습니다. 탭이 열려 있을 때 <b>화면 중앙 팝업 + 소리</b>로 알립니다.</span>';
+    } else {
+      permRow.style.background = '#fff';
+      permRow.style.border = '1.5px solid #e8e8e8';
+      const permTxt = document.createElement('span'); permTxt.style.cssText = 'color:#555;flex:1';
+      const refreshPerm = () => {
+        if (!('Notification' in window)) permTxt.textContent = '❌ 이 브라우저는 알림을 지원하지 않습니다';
+        else if (Notification.permission === 'granted') permTxt.textContent = '✅ 브라우저 알림 허용됨';
+        else if (Notification.permission === 'denied') permTxt.textContent = '🚫 알림 차단됨 — 주소창 옆 아이콘에서 허용하세요';
+        else permTxt.textContent = '❓ 알림 권한이 필요합니다';
+      };
+      refreshPerm(); permRow.appendChild(permTxt);
+      if ('Notification' in window && Notification.permission === 'default') {
+        const btnP = document.createElement('button'); btnP.className = 'btn-modal-action';
+        btnP.textContent = '알림 허용'; btnP.style.fontSize = '.8rem';
+        btnP.addEventListener('click', async () => { await requestNotificationPermission(); refreshPerm(); btnP.remove(); });
+        permRow.appendChild(btnP);
+      }
+    }
+    panel.appendChild(permRow);
+
+    // Windows 자동 시작 설정 섹션
+    const schedSection = document.createElement('div');
+    schedSection.style.cssText = 'margin-top:1rem;padding:0.85rem 1rem;background:#f0f4ff;border:1px solid #c5d0f5;border-radius:0.6rem;';
+    const schedTitle = document.createElement('div');
+    schedTitle.style.cssText = 'font-weight:600;font-size:0.82rem;color:#3a3a6e;margin-bottom:0.4rem;';
+    schedTitle.textContent = '🖥 Windows 자동 시작 설정';
+    const schedDesc = document.createElement('div');
+    schedDesc.style.cssText = 'font-size:0.73rem;color:#555;margin-bottom:0.6rem;line-height:1.5;';
+    schedDesc.innerHTML =
+      '아래 버튼으로 <b>PowerShell 스크립트(.ps1)</b>를 내려받고,<br>' +
+      '파일을 우클릭 → <b>"PowerShell로 실행"</b> 하면<br>' +
+      'Windows 작업 스케줄러에 자동 등록됩니다.<br>' +
+      '<span style="color:#888;">(위에서 알람 시간을 먼저 저장한 뒤 내려받으세요.)</span>';
+    const btnSched = document.createElement('button');
+    btnSched.className = 'btn-modal-action';
+    btnSched.style.cssText = 'background:#3d5af1;font-size:0.78rem;padding:0.38rem 0.9rem;';
+    btnSched.textContent = '📥 자동 시작 스크립트 내려받기';
+    btnSched.addEventListener('click', () => { saveAlarmSettings(); downloadSchedulerScript(); });
+    schedSection.append(schedTitle, schedDesc, btnSched);
+    panel.appendChild(schedSection);
+
+    const btnRow = document.createElement('div'); btnRow.style.cssText = 'display:flex;gap:8px;justify-content:flex-end;margin-top:0.8rem;';
+    const btnSave = document.createElement('button'); btnSave.className = 'btn-modal-action'; btnSave.textContent = '저장';
+    btnSave.addEventListener('click', () => { saveAlarmSettings(); closeAlarmModal(); });
+    const btnCnl = document.createElement('button'); btnCnl.className = 'btn-modal-danger'; btnCnl.textContent = '닫기';
+    btnCnl.addEventListener('click', closeAlarmModal);
+    btnRow.append(btnSave, btnCnl); panel.appendChild(btnRow);
+  }
+
+  document.getElementById('btn-alarm').addEventListener('click', openAlarmModal);
+  document.getElementById('alarm-modal-overlay').addEventListener('click', e => {
+    if (e.target === document.getElementById('alarm-modal-overlay')) closeAlarmModal();
+  });
+
   async function initApp() {
     await load();
+    loadAlarmSettings();
+    populateDeptFilterBar();
     populateRegDeptSelect();
     render();
+    checkAlarms(0);
+    setInterval(() => checkAlarms(0), 10000); // 10초마다 확인 (백그라운드 스로틀 대비)
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) checkAlarms(5); // 탭 활성화 시 최대 5분 이내 누락 알람 재확인
+    });
   }
 
   initApp();
