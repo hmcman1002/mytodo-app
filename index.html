@@ -768,20 +768,21 @@
 
         if (!initialResolved) {
           initialResolved = true;
-          let localData = null, localSavedAt = 0;
+          let sessionData = null;
           try {
-            localData = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
-            localSavedAt = localData?.clientSavedAt || 0;
+            sessionData = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || 'null');
           } catch(e) {}
           if (snap.exists()) {
-            const fsUpdatedAt = snap.data().updatedAt?.toMillis?.() || 0;
-            if (localData && localSavedAt > fsUpdatedAt) {
-              normalizeLoadedData(localData);
+            if (sessionData) {
+              normalizeLoadedData(sessionData);
             } else {
               normalizeLoadedData(snap.data());
             }
           } else {
-            if (localData) normalizeLoadedData(localData);
+            try {
+              const d = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+              if (d) normalizeLoadedData(d);
+            } catch(e) {}
           }
           if (departments.length === 0) {
             DEFAULT_DEPTS.forEach(name => departments.push({ id: genId(), name }));
@@ -815,8 +816,9 @@
   }
 
   async function save() {
-    const data = { todos, dailyCounts, departments, members, clientSavedAt: Date.now() };
+    const data = { todos, dailyCounts, departments, members };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 
     try {
       await setDoc(FIRESTORE_DOC_REF, {
