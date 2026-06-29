@@ -416,7 +416,6 @@
   import {
     getFirestore,
     doc,
-    getDoc,
     onSnapshot,
     setDoc,
     serverTimestamp
@@ -1904,17 +1903,7 @@
     checkAlarms(0);
     setInterval(() => checkAlarms(0), 10000); // 10초마다 확인 (백그라운드 스로틀 대비)
     document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) {
-        checkAlarms(5);
-        getDoc(FIRESTORE_DOC_REF).then(snap => {
-          if (snap.exists()) {
-            normalizeLoadedData(snap.data());
-            populateDeptFilterBar();
-            populateRegDeptSelect();
-            render();
-          }
-        }).catch(() => {});
-      }
+      if (!document.hidden) checkAlarms(5);
     });
   }
 
