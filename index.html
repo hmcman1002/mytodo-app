@@ -416,7 +416,7 @@
   import {
     getFirestore,
     doc,
-    getDoc,
+    onSnapshot,
     setDoc,
     serverTimestamp
   } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
@@ -760,43 +760,51 @@
   }
 
   async function load() {
-    let loaded = false;
+    return new Promise((resolve) => {
+      let initialResolved = false;
 
-    try {
-      const snap = await getDoc(FIRESTORE_DOC_REF);
-      if (snap.exists()) {
-        normalizeLoadedData(snap.data());
-        loaded = true;
-      }
-    } catch(e) {
-      console.warn('Firestore에서 데이터를 불러오지 못해 localStorage 백업을 확인합니다.', e);
-    }
+      onSnapshot(FIRESTORE_DOC_REF, (snap) => {
+        if (snap.metadata.hasPendingWrites) return;
 
-    if (!loaded) {
-      try {
-        const d = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
-        if (d) {
-          normalizeLoadedData(d);
-          loaded = true;
+        if (!initialResolved) {
+          initialResolved = true;
+          if (snap.exists()) {
+            normalizeLoadedData(snap.data());
+          } else {
+            try {
+              const d = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+              if (d) normalizeLoadedData(d);
+            } catch(e) {}
+          }
+          if (departments.length === 0) {
+            DEFAULT_DEPTS.forEach(name => departments.push({ id: genId(), name }));
+            save().then(resolve);
+          } else {
+            resolve();
+          }
+        } else {
+          if (snap.exists()) {
+            normalizeLoadedData(snap.data());
+            populateDeptFilterBar();
+            populateRegDeptSelect();
+            render();
+          }
         }
-      } catch(e) {
-        console.warn('localStorage 백업을 불러오지 못했습니다.', e);
-      }
-    }
-
-    if (!loaded) {
-      todos = [];
-      dailyCounts = {};
-      departments = [];
-      members = [];
-    }
-
-    if (departments.length === 0) {
-      DEFAULT_DEPTS.forEach(name => departments.push({ id: genId(), name }));
-      await save();
-    } else if (!loaded) {
-      await save();
-    }
+      }, (error) => {
+        console.warn('Firestore 실시간 연결 오류. localStorage 백업을 사용합니다.', error);
+        if (!initialResolved) {
+          initialResolved = true;
+          try {
+            const d = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+            if (d) normalizeLoadedData(d);
+          } catch(e) {}
+          if (departments.length === 0) {
+            DEFAULT_DEPTS.forEach(name => departments.push({ id: genId(), name }));
+          }
+          resolve();
+        }
+      });
+    });
   }
 
   async function save() {
