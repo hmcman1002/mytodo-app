@@ -312,11 +312,178 @@
     .member-table .empty-row td { text-align: center; color: #bbb; padding: 14px; }
     .add-member-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
     .add-member-row .form-control { padding: 7px 10px; }
+
+    /* ── 로그인 화면 ── */
+    #screen-login {
+      position: fixed; inset: 0; z-index: 9999;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+      display: flex; align-items: center; justify-content: center;
+    }
+    #screen-login.hidden { display: none; }
+    .login-box {
+      background: #fff; border-radius: 20px;
+      padding: 2.4rem 2.8rem; width: 360px; max-width: 92vw;
+      box-shadow: 0 20px 60px rgba(0,0,0,.4);
+    }
+    .login-box h2 { font-size: 1.4rem; color: #1a1a2e; margin-bottom: .3rem; }
+    .login-box .login-sub { font-size: .82rem; color: #aaa; margin-bottom: 1.6rem; }
+    .login-field { margin-bottom: 1rem; }
+    .login-field label { display: block; font-size: .8rem; color: #666; margin-bottom: .3rem; font-weight: 600; }
+    .login-field input {
+      width: 100%; padding: .65rem .9rem; border: 1.5px solid #e0e0e0;
+      border-radius: 9px; font-size: .9rem; outline: none;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .login-field input:focus { border-color: #6c63ff; box-shadow: 0 0 0 3px rgba(108,99,255,.13); }
+    .btn-login {
+      width: 100%; padding: .7rem; background: #6c63ff; color: #fff;
+      border: none; border-radius: 9px; font-size: .95rem; font-weight: 700;
+      cursor: pointer; margin-top: .4rem; transition: background .18s;
+    }
+    .btn-login:hover { background: #574fd6; }
+    .login-error { color: #e53935; font-size: .8rem; margin-top: .6rem; text-align: center; min-height: 1.2rem; }
+    .login-spinner { text-align: center; color: #6c63ff; font-size: .85rem; margin-top: .6rem; }
+
+    /* ── 앱 헤더 (사용자 정보) ── */
+    .app-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .app-header h1 { margin-bottom: 0; }
+    .user-info { display: flex; align-items: center; gap: 10px; }
+    .user-badge {
+      font-size: .8rem; background: #ede9ff; color: #4a3fa0;
+      padding: 4px 12px; border-radius: 20px; font-weight: 600;
+    }
+    .user-badge.reader { background: #e8f5e9; color: #2e7d32; }
+    .btn-user-mgmt {
+      background: none; border: 1.5px solid #6c63ff; border-radius: 8px;
+      padding: 4px 12px; font-size: .78rem; color: #6c63ff; cursor: pointer;
+      font-weight: 600; transition: all .18s; white-space: nowrap;
+    }
+    .btn-user-mgmt:hover { background: #f4f3ff; }
+    .btn-logout {
+      background: none; border: 1.5px solid #ccc; border-radius: 8px;
+      padding: 4px 12px; font-size: .78rem; color: #888; cursor: pointer;
+      transition: all .18s; white-space: nowrap;
+    }
+    .btn-logout:hover { border-color: #ff6b6b; color: #ff6b6b; }
+
+    /* ── 사용자 관리 모달 ── */
+    #screen-users {
+      position: fixed; inset: 0; z-index: 8000;
+      background: rgba(0,0,0,.45); display: flex; align-items: center; justify-content: center;
+    }
+    #screen-users.hidden { display: none; }
+    .users-panel {
+      background: #fff; border-radius: 16px; width: 560px; max-width: 95vw;
+      max-height: 90vh; overflow: hidden; display: flex; flex-direction: column;
+      box-shadow: 0 12px 48px rgba(0,0,0,.22);
+    }
+    .users-panel-hdr {
+      background: #1a1a2e; color: #fff; padding: 1rem 1.4rem;
+      display: flex; align-items: center; justify-content: space-between;
+      border-radius: 16px 16px 0 0;
+    }
+    .users-panel-hdr span { font-size: 1rem; font-weight: 700; }
+    .users-panel-hdr button { background: none; border: none; color: #fff; font-size: 1.1rem; cursor: pointer; line-height: 1; }
+    .users-body { padding: 1.2rem 1.4rem; overflow-y: auto; flex: 1; }
+    .user-table { width: 100%; border-collapse: collapse; font-size: .86rem; margin-bottom: 1.4rem; }
+    .user-table th { background: #f5f5f5; padding: 8px 10px; text-align: left; font-size: .78rem; color: #666; }
+    .user-table td { padding: 9px 10px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; }
+    .user-table .empty-row td { text-align: center; color: #bbb; padding: 20px; }
+    .role-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: .75rem; font-weight: 700; }
+    .role-badge.admin { background: #ede9ff; color: #4a3fa0; }
+    .role-badge.reader { background: #e8f5e9; color: #2e7d32; }
+    .users-add-section { border-top: 2px solid #f0f0f0; padding-top: 1rem; }
+    .users-add-section h4 { font-size: .88rem; color: #444; margin-bottom: .8rem; }
+    .users-add-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; margin-bottom: .6rem; }
+    .users-add-grid input, .users-add-grid select {
+      padding: .55rem .8rem; border: 1.5px solid #e0e0e0; border-radius: 8px;
+      font-size: .84rem; outline: none; transition: border-color .15s;
+    }
+    .users-add-grid input:focus, .users-add-grid select:focus { border-color: #6c63ff; }
+    .users-add-grid input[type="password"] { grid-column: 1 / -1; }
+    .btn-add-user {
+      background: #6c63ff; color: #fff; border: none; border-radius: 8px;
+      padding: .55rem 1.2rem; font-size: .84rem; font-weight: 700;
+      cursor: pointer; transition: background .18s;
+    }
+    .btn-add-user:hover { background: #574fd6; }
+    .users-msg { font-size: .8rem; margin-top: .5rem; min-height: 1.2rem; }
+    .users-msg.ok { color: #2e7d32; }
+    .users-msg.err { color: #e53935; }
+
+    /* ── reader 모드 — 편집 UI 숨김 ── */
+    body.reader-mode .register-section { display: none !important; }
+    body.reader-mode .btn-members { display: none !important; }
+    body.reader-mode .btn-undo { display: none !important; }
+    body.reader-mode .clear-done { display: none !important; }
+    body.reader-mode .btn-del { visibility: hidden; }
+    body.reader-mode .btn-ext { display: none !important; }
+    body.reader-mode .btn-uncomplete { display: none !important; }
+    body.reader-mode .btn-cancel-ext { display: none !important; }
+    body.reader-mode .cell-input { pointer-events: none; }
+    body.reader-mode .cell-textarea { pointer-events: none; }
+    body.reader-mode .serial-yymmdd { pointer-events: none; }
   </style>
 </head>
 <body>
+
+<!-- 로그인 화면 -->
+<div id="screen-login">
+  <div class="login-box">
+    <h2>할일 목록</h2>
+    <p class="login-sub">계속하려면 로그인하세요.</p>
+    <div class="login-field">
+      <label>이메일</label>
+      <input type="email" id="login-email" placeholder="이메일 주소" autocomplete="username">
+    </div>
+    <div class="login-field">
+      <label>비밀번호</label>
+      <input type="password" id="login-pw" placeholder="비밀번호" autocomplete="current-password">
+    </div>
+    <button class="btn-login" id="btn-login">로그인</button>
+    <div class="login-error" id="login-error"></div>
+  </div>
+</div>
+
+<!-- 사용자 관리 모달 -->
+<div id="screen-users" class="hidden">
+  <div class="users-panel">
+    <div class="users-panel-hdr">
+      <span>사용자 관리</span>
+      <button id="btn-close-users">✕</button>
+    </div>
+    <div class="users-body">
+      <table class="user-table" id="user-table">
+        <thead><tr><th>이름</th><th>이메일</th><th>권한</th><th style="width:100px"></th></tr></thead>
+        <tbody id="user-table-body"></tbody>
+      </table>
+      <div class="users-add-section">
+        <h4>새 사용자 추가</h4>
+        <div class="users-add-grid">
+          <input type="text"     id="new-user-name"  placeholder="이름">
+          <input type="email"    id="new-user-email" placeholder="이메일">
+          <input type="password" id="new-user-pw"    placeholder="비밀번호">
+          <select id="new-user-role">
+            <option value="admin">관리자 (전체)</option>
+            <option value="reader" selected>조회자 (읽기전용)</option>
+          </select>
+        </div>
+        <button class="btn-add-user" id="btn-add-user">추가</button>
+        <div class="users-msg" id="users-msg"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="app">
-  <h1>할일 목록</h1>
+  <div class="app-header">
+    <h1>할일 목록</h1>
+    <div class="user-info">
+      <span class="user-badge" id="user-badge"></span>
+      <button class="btn-user-mgmt hidden" id="btn-user-mgmt">사용자 관리</button>
+      <button class="btn-logout" id="btn-logout">로그아웃</button>
+    </div>
+  </div>
 
   <div class="progress-bar">
     <div class="progress-fill" id="progress-fill" style="width:0%"></div>
@@ -415,9 +582,10 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
   import {
     getFirestore,
-    doc,
-    onSnapshot,
-    setDoc,
+    doc, collection,
+    onSnapshot, getDocs, getDoc,
+    setDoc, addDoc, updateDoc, deleteDoc,
+    query, where,
     serverTimestamp
   } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
@@ -1879,6 +2047,148 @@
     if (e.target === document.getElementById('alarm-modal-overlay')) closeAlarmModal();
   });
 
+  /* ══════════════════════════════════════════════
+     인증 / 사용자 관리
+  ══════════════════════════════════════════════ */
+  const AUTH_KEY   = 'todo_auth_v1';
+  const USERS_COL  = collection(db, 'users');
+  let currentUser  = null;   // { docId, name, email, role }
+
+  /* SHA-256 해시 (Web Crypto API) */
+  async function sha256(text) {
+    const buf = await crypto.subtle.digest('SHA-256',
+      new TextEncoder().encode(text));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  /* 앱 표시 + 역할 적용 */
+  function applySession(user) {
+    currentUser = user;
+    sessionStorage.setItem(AUTH_KEY, JSON.stringify(user));
+    document.getElementById('screen-login').classList.add('hidden');
+    const badge = document.getElementById('user-badge');
+    badge.textContent = user.name + ' (' + (user.role === 'admin' ? '관리자' : '조회') + ')';
+    badge.className   = 'user-badge' + (user.role === 'reader' ? ' reader' : '');
+    if (user.role === 'admin') {
+      document.getElementById('btn-user-mgmt').classList.remove('hidden');
+    }
+    if (user.role === 'reader') {
+      document.body.classList.add('reader-mode');
+    }
+  }
+
+  /* 로그인 처리 */
+  async function doLogin() {
+    const email = document.getElementById('login-email').value.trim().toLowerCase();
+    const pw    = document.getElementById('login-pw').value;
+    const errEl = document.getElementById('login-error');
+    const btnL  = document.getElementById('btn-login');
+    if (!email || !pw) { errEl.textContent = '이메일과 비밀번호를 입력하세요.'; return; }
+
+    btnL.disabled = true; btnL.textContent = '확인 중...'; errEl.textContent = '';
+    try {
+      const hash = await sha256(pw);
+      const q    = query(USERS_COL, where('email', '==', email), where('passwordHash', '==', hash));
+      const snap = await getDocs(q);
+      if (snap.empty) {
+        errEl.textContent = '이메일 또는 비밀번호가 올바르지 않습니다.';
+      } else {
+        const d    = snap.docs[0];
+        applySession({ docId: d.id, ...d.data() });
+      }
+    } catch(e) {
+      errEl.textContent = '오류가 발생했습니다. 다시 시도하세요.';
+      console.error(e);
+    }
+    btnL.disabled = false; btnL.textContent = '로그인';
+  }
+
+  document.getElementById('login-pw').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin().then(() => { if (currentUser) initApp(); }); });
+  document.getElementById('login-email').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('login-pw').focus(); });
+
+  /* 로그아웃 */
+  document.getElementById('btn-logout').addEventListener('click', () => {
+    if (!confirm('로그아웃 하시겠습니까?')) return;
+    sessionStorage.removeItem(AUTH_KEY);
+    currentUser = null;
+    document.body.classList.remove('reader-mode');
+    document.getElementById('btn-user-mgmt').classList.add('hidden');
+    document.getElementById('screen-login').classList.remove('hidden');
+    document.getElementById('login-pw').value = '';
+    document.getElementById('login-error').textContent = '';
+  });
+
+  /* ── 사용자 관리 ── */
+  async function renderUserTable() {
+    const tbody = document.getElementById('user-table-body');
+    tbody.innerHTML = '';
+    const snap = await getDocs(USERS_COL);
+    if (snap.empty) {
+      tbody.innerHTML = '<tr class="empty-row"><td colspan="4">등록된 사용자가 없습니다.</td></tr>';
+      return;
+    }
+    snap.docs.forEach(d => {
+      const u  = d.data();
+      const tr = document.createElement('tr');
+      const roleLabel = u.role === 'admin' ? '관리자' : '조회';
+      const roleCls   = u.role === 'admin' ? 'admin' : 'reader';
+      const isSelf    = currentUser && d.id === currentUser.docId;
+      tr.innerHTML = `
+        <td>${u.name}</td>
+        <td style="font-size:.8rem;color:#888">${u.email}</td>
+        <td><span class="role-badge ${roleCls}">${roleLabel}</span></td>
+        <td>
+          <button class="btn-modal-danger sm" data-id="${d.id}" data-name="${u.name}"
+            ${isSelf ? 'disabled title="본인 계정은 삭제 불가"' : ''}>삭제</button>
+        </td>`;
+      tr.querySelector('.btn-modal-danger').addEventListener('click', async ev => {
+        const id   = ev.currentTarget.dataset.id;
+        const name = ev.currentTarget.dataset.name;
+        if (!confirm(`"${name}"을(를) 삭제하시겠습니까?`)) return;
+        await deleteDoc(doc(db, 'users', id));
+        renderUserTable();
+      });
+      tbody.appendChild(tr);
+    });
+  }
+
+  async function addUser() {
+    const name  = document.getElementById('new-user-name').value.trim();
+    const email = document.getElementById('new-user-email').value.trim().toLowerCase();
+    const pw    = document.getElementById('new-user-pw').value;
+    const role  = document.getElementById('new-user-role').value;
+    const msgEl = document.getElementById('users-msg');
+    if (!name || !email || !pw) { msgEl.className='users-msg err'; msgEl.textContent='모든 항목을 입력하세요.'; return; }
+    try {
+      /* 중복 이메일 체크 */
+      const dup = await getDocs(query(USERS_COL, where('email','==',email)));
+      if (!dup.empty) { msgEl.className='users-msg err'; msgEl.textContent='이미 등록된 이메일입니다.'; return; }
+      const hash = await sha256(pw);
+      await addDoc(USERS_COL, { name, email, passwordHash: hash, role, createdAt: serverTimestamp() });
+      document.getElementById('new-user-name').value  = '';
+      document.getElementById('new-user-email').value = '';
+      document.getElementById('new-user-pw').value    = '';
+      msgEl.className = 'users-msg ok'; msgEl.textContent = `"${name}" 추가 완료.`;
+      renderUserTable();
+    } catch(e) {
+      msgEl.className = 'users-msg err'; msgEl.textContent = '오류: ' + e.message;
+    }
+  }
+
+  document.getElementById('btn-add-user').addEventListener('click', addUser);
+  document.getElementById('btn-user-mgmt').addEventListener('click', () => {
+    document.getElementById('screen-users').classList.remove('hidden');
+    renderUserTable();
+    document.getElementById('users-msg').textContent = '';
+  });
+  document.getElementById('btn-close-users').addEventListener('click', () => {
+    document.getElementById('screen-users').classList.add('hidden');
+  });
+  document.getElementById('screen-users').addEventListener('click', e => {
+    if (e.target === document.getElementById('screen-users'))
+      document.getElementById('screen-users').classList.add('hidden');
+  });
+
   /* ── 등록 영역 접기/펼치기 ── */
   const regSection = document.querySelector('.register-section');
   const regHeader  = document.querySelector('.register-header');
@@ -1901,13 +2211,65 @@
     populateRegDeptSelect();
     render();
     checkAlarms(0);
-    setInterval(() => checkAlarms(0), 10000); // 10초마다 확인 (백그라운드 스로틀 대비)
+    setInterval(() => checkAlarms(0), 10000);
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden) checkAlarms(5);
     });
   }
 
-  initApp();
+  /* ── 앱 시작: 세션 확인 후 로그인 또는 바로 진입 ── */
+  (async function start() {
+    /* Firestore에 사용자가 한 명도 없으면 최초 관리자 설정 안내 */
+    const snap = await getDocs(USERS_COL);
+    if (snap.empty) {
+      /* 자동으로 초기 관리자 계정 등록 UI 표시 */
+      document.getElementById('screen-login').classList.remove('hidden');
+      const box = document.querySelector('.login-box');
+      box.innerHTML = `
+        <h2>최초 관리자 설정</h2>
+        <p class="login-sub">처음 사용 시 관리자 계정을 만드세요.</p>
+        <div class="login-field"><label>이름</label><input type="text" id="init-name" placeholder="예: 김천희"></div>
+        <div class="login-field"><label>이메일</label><input type="email" id="init-email" placeholder="이메일 주소"></div>
+        <div class="login-field"><label>비밀번호</label><input type="password" id="init-pw" placeholder="비밀번호 설정"></div>
+        <button class="btn-login" id="btn-init">관리자 계정 생성</button>
+        <div class="login-error" id="login-error"></div>`;
+      document.getElementById('btn-init').addEventListener('click', async () => {
+        const name  = document.getElementById('init-name').value.trim();
+        const email = document.getElementById('init-email').value.trim().toLowerCase();
+        const pw    = document.getElementById('init-pw').value;
+        const errEl = document.getElementById('login-error');
+        if (!name || !email || !pw) { errEl.textContent = '모든 항목을 입력하세요.'; return; }
+        const hash = await sha256(pw);
+        const ref  = await addDoc(USERS_COL, { name, email, passwordHash: hash, role: 'admin', createdAt: serverTimestamp() });
+        applySession({ docId: ref.id, name, email, role: 'admin' });
+        await initApp();
+      });
+      return;
+    }
+
+    /* 세션 복원 시도 */
+    try {
+      const saved = JSON.parse(sessionStorage.getItem(AUTH_KEY) || 'null');
+      if (saved && saved.email) {
+        /* Firestore에서 계정이 여전히 유효한지 확인 */
+        const q    = query(USERS_COL, where('email', '==', saved.email));
+        const chk  = await getDocs(q);
+        if (!chk.empty) {
+          const d = chk.docs[0];
+          applySession({ docId: d.id, ...d.data() });
+          await initApp();
+          return;
+        }
+      }
+    } catch(e) {}
+
+    /* 로그인 화면 표시 */
+    document.getElementById('screen-login').classList.remove('hidden');
+    document.getElementById('btn-login').addEventListener('click', async () => {
+      await doLogin();
+      if (currentUser) await initApp();
+    }, { once: false });
+  })();
 </script>
 </body>
 </html>
