@@ -365,6 +365,48 @@
       transition: all .18s; white-space: nowrap;
     }
     .btn-logout:hover { border-color: #ff6b6b; color: #ff6b6b; }
+    .btn-chpw {
+      background: none; border: 1.5px solid #ccc; border-radius: 8px;
+      padding: 4px 12px; font-size: .78rem; color: #888; cursor: pointer;
+      transition: all .18s; white-space: nowrap;
+    }
+    .btn-chpw:hover { border-color: #6c63ff; color: #6c63ff; }
+
+    /* ── 비밀번호 변경 모달 ── */
+    #screen-chpw {
+      position: fixed; inset: 0; z-index: 9000;
+      background: rgba(0,0,0,.45); display: flex; align-items: center; justify-content: center;
+    }
+    #screen-chpw.hidden { display: none; }
+    .chpw-panel {
+      background: #fff; border-radius: 16px; width: 360px; max-width: 94vw;
+      box-shadow: 0 12px 48px rgba(0,0,0,.22); overflow: hidden;
+    }
+    .chpw-panel-hdr {
+      background: #1a1a2e; color: #fff; padding: .9rem 1.4rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .chpw-panel-hdr span { font-size: .95rem; font-weight: 700; }
+    .chpw-panel-hdr button { background: none; border: none; color: #fff; font-size: 1.1rem; cursor: pointer; }
+    .chpw-body { padding: 1.4rem; }
+    .chpw-field { margin-bottom: .9rem; }
+    .chpw-field label { display: block; font-size: .78rem; color: #666; font-weight: 600; margin-bottom: .3rem; }
+    .chpw-field input {
+      width: 100%; padding: .6rem .85rem; border: 1.5px solid #e0e0e0;
+      border-radius: 8px; font-size: .88rem; outline: none; transition: border-color .15s;
+    }
+    .chpw-field input:focus { border-color: #6c63ff; }
+    .chpw-btns { display: flex; gap: 8px; justify-content: flex-end; margin-top: 1rem; }
+    .chpw-msg { font-size: .8rem; min-height: 1.2rem; margin-top: .4rem; }
+    .chpw-msg.ok { color: #2e7d32; }
+    .chpw-msg.err { color: #e53935; }
+    /* 사용자 테이블 초기화 버튼 */
+    .btn-reset-pw {
+      background: none; border: 1.5px solid #f0a500; color: #f0a500;
+      border-radius: 6px; padding: 3px 8px; font-size: .75rem; cursor: pointer;
+      transition: all .18s; white-space: nowrap; margin-left: 4px;
+    }
+    .btn-reset-pw:hover { background: #f0a500; color: #fff; }
 
     /* ── 사용자 관리 모달 ── */
     #screen-users {
@@ -445,6 +487,35 @@
   </div>
 </div>
 
+<!-- 비밀번호 변경 모달 -->
+<div id="screen-chpw" class="hidden">
+  <div class="chpw-panel">
+    <div class="chpw-panel-hdr">
+      <span>비밀번호 변경</span>
+      <button id="btn-close-chpw">✕</button>
+    </div>
+    <div class="chpw-body">
+      <div class="chpw-field">
+        <label>현재 비밀번호</label>
+        <input type="password" id="chpw-cur" placeholder="현재 비밀번호">
+      </div>
+      <div class="chpw-field">
+        <label>새 비밀번호</label>
+        <input type="password" id="chpw-new" placeholder="새 비밀번호">
+      </div>
+      <div class="chpw-field">
+        <label>새 비밀번호 확인</label>
+        <input type="password" id="chpw-new2" placeholder="새 비밀번호 재입력">
+      </div>
+      <div class="chpw-msg" id="chpw-msg"></div>
+      <div class="chpw-btns">
+        <button class="btn-modal-danger" id="btn-chpw-cancel">취소</button>
+        <button class="btn-modal-action" id="btn-chpw-ok">변경</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- 사용자 관리 모달 -->
 <div id="screen-users" class="hidden">
   <div class="users-panel">
@@ -454,7 +525,7 @@
     </div>
     <div class="users-body">
       <table class="user-table" id="user-table">
-        <thead><tr><th>이름</th><th>이메일</th><th>권한</th><th style="width:100px"></th></tr></thead>
+        <thead><tr><th>이름</th><th>이메일</th><th>권한</th><th style="width:140px"></th></tr></thead>
         <tbody id="user-table-body"></tbody>
       </table>
       <div class="users-add-section">
@@ -481,6 +552,7 @@
     <div class="user-info">
       <span class="user-badge" id="user-badge"></span>
       <button class="btn-user-mgmt hidden" id="btn-user-mgmt">사용자 관리</button>
+      <button class="btn-chpw" id="btn-chpw">비밀번호 변경</button>
       <button class="btn-logout" id="btn-logout">로그아웃</button>
     </div>
   </div>
@@ -2113,6 +2185,8 @@
     currentUser = null;
     document.body.classList.remove('reader-mode');
     document.getElementById('btn-user-mgmt').classList.add('hidden');
+    document.getElementById('screen-users').classList.add('hidden');
+    document.getElementById('screen-chpw').classList.add('hidden');
     document.getElementById('screen-login').classList.remove('hidden');
     document.getElementById('login-pw').value = '';
     document.getElementById('login-error').textContent = '';
@@ -2138,9 +2212,23 @@
         <td style="font-size:.8rem;color:#888">${u.email}</td>
         <td><span class="role-badge ${roleCls}">${roleLabel}</span></td>
         <td>
+          <button class="btn-reset-pw" data-id="${d.id}" data-name="${u.name}"
+            ${isSelf ? 'disabled title="본인 비번은 비밀번호 변경 사용"' : ''}>초기화</button>
           <button class="btn-modal-danger sm" data-id="${d.id}" data-name="${u.name}"
             ${isSelf ? 'disabled title="본인 계정은 삭제 불가"' : ''}>삭제</button>
         </td>`;
+      tr.querySelector('.btn-reset-pw').addEventListener('click', async ev => {
+        if (ev.currentTarget.disabled) return;
+        const id   = ev.currentTarget.dataset.id;
+        const name = ev.currentTarget.dataset.name;
+        const newPw = prompt(`"${name}"의 새 초기 비밀번호를 입력하세요:`);
+        if (!newPw) return;
+        const hash = await sha256(newPw);
+        await updateDoc(doc(db, 'users', id), { passwordHash: hash });
+        const msgEl = document.getElementById('users-msg');
+        msgEl.className = 'users-msg ok';
+        msgEl.textContent = `"${name}" 비밀번호가 초기화되었습니다.`;
+      });
       tr.querySelector('.btn-modal-danger').addEventListener('click', async ev => {
         const id   = ev.currentTarget.dataset.id;
         const name = ev.currentTarget.dataset.name;
@@ -2174,6 +2262,54 @@
       msgEl.className = 'users-msg err'; msgEl.textContent = '오류: ' + e.message;
     }
   }
+
+  /* ── 비밀번호 변경 (본인) ── */
+  function openChpw() {
+    document.getElementById('chpw-cur').value  = '';
+    document.getElementById('chpw-new').value  = '';
+    document.getElementById('chpw-new2').value = '';
+    document.getElementById('chpw-msg').textContent = '';
+    document.getElementById('chpw-msg').className   = 'chpw-msg';
+    document.getElementById('screen-chpw').classList.remove('hidden');
+    document.getElementById('chpw-cur').focus();
+  }
+  function closeChpw() {
+    document.getElementById('screen-chpw').classList.add('hidden');
+  }
+  async function doChpw() {
+    const cur  = document.getElementById('chpw-cur').value;
+    const nw   = document.getElementById('chpw-new').value;
+    const nw2  = document.getElementById('chpw-new2').value;
+    const msgEl = document.getElementById('chpw-msg');
+    if (!cur || !nw || !nw2) {
+      msgEl.className = 'chpw-msg err'; msgEl.textContent = '모든 항목을 입력하세요.'; return;
+    }
+    if (nw !== nw2) {
+      msgEl.className = 'chpw-msg err'; msgEl.textContent = '새 비밀번호가 일치하지 않습니다.'; return;
+    }
+    if (nw.length < 4) {
+      msgEl.className = 'chpw-msg err'; msgEl.textContent = '비밀번호는 4자 이상이어야 합니다.'; return;
+    }
+    const curHash = await sha256(cur);
+    const docSnap = await getDoc(doc(db, 'users', currentUser.docId));
+    if (!docSnap.exists() || docSnap.data().passwordHash !== curHash) {
+      msgEl.className = 'chpw-msg err'; msgEl.textContent = '현재 비밀번호가 올바르지 않습니다.'; return;
+    }
+    const newHash = await sha256(nw);
+    await updateDoc(doc(db, 'users', currentUser.docId), { passwordHash: newHash });
+    msgEl.className = 'chpw-msg ok'; msgEl.textContent = '비밀번호가 변경되었습니다.';
+    setTimeout(closeChpw, 1200);
+  }
+  document.getElementById('btn-chpw').addEventListener('click', openChpw);
+  document.getElementById('btn-close-chpw').addEventListener('click', closeChpw);
+  document.getElementById('btn-chpw-cancel').addEventListener('click', closeChpw);
+  document.getElementById('btn-chpw-ok').addEventListener('click', doChpw);
+  document.getElementById('screen-chpw').addEventListener('click', e => {
+    if (e.target === document.getElementById('screen-chpw')) closeChpw();
+  });
+  document.getElementById('chpw-new2').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doChpw();
+  });
 
   document.getElementById('btn-add-user').addEventListener('click', addUser);
   document.getElementById('btn-user-mgmt').addEventListener('click', () => {
