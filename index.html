@@ -1010,16 +1010,8 @@
 
         if (!initialResolved) {
           initialResolved = true;
-          let sessionData = null;
-          try {
-            sessionData = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || 'null');
-          } catch(e) {}
           if (snap.exists()) {
-            if (sessionData) {
-              normalizeLoadedData(sessionData);
-            } else {
-              normalizeLoadedData(snap.data());
-            }
+            normalizeLoadedData(snap.data());  // 항상 Firestore 최신 데이터 사용
           } else {
             try {
               const d = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
@@ -1059,8 +1051,7 @@
 
   async function save() {
     const data = { todos, dailyCounts, departments, members };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));  // 오프라인 백업용만 유지
 
     try {
       await setDoc(FIRESTORE_DOC_REF, {
