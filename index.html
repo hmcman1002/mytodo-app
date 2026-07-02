@@ -91,6 +91,7 @@
     tbody tr.done-row .serial-plain { color: #666 !important; }
     tbody tr.extended-row { background: #fff; }
     tbody tr.done-row.extended-row { background: #f5fff5; }
+    tbody tr.group-end { border-bottom: 2px solid #aaaaaa; }
     tbody tr.done-section-start td { border-top: 2px dashed #9ec89e; }
     tbody td { padding: 3px 3px; vertical-align: middle; }
 
@@ -1389,6 +1390,10 @@
     visible.forEach(t => { groupCount[t.baseSerial] = (groupCount[t.baseSerial] || 0) + 1; });
     const groupSeen = new Set();
 
+    /* 각 그룹의 마지막 행 id (group-end 클래스용) */
+    const groupLastId = {};
+    visible.forEach(t => { groupLastId[t.baseSerial] = t.id; });
+
     tbody.innerHTML = '';
     let doneSectionStarted = false;
 
@@ -1408,6 +1413,7 @@
         }
       }
       if (todo.subSerial > 0) tr.classList.add('extended-row');
+      if (groupLastId[todo.baseSerial] === todo.id) tr.classList.add('group-end');
 
       /* ── 일련번호 ── */
       const tdSerial = document.createElement('td');
